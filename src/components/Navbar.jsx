@@ -15,13 +15,24 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          📚 Book Inventory
+          Trifties Bookstore
         </Link>
         
         <div className="navbar-menu">
           <Link to="/books" className="navbar-link">
             Books
           </Link>
+          
+          {isAuthenticated && (
+            <>
+              <Link to="/reservations" className="navbar-link">
+                My Reservations
+              </Link>
+              <Link to="/profile" className="navbar-link">
+                Profile
+              </Link>
+            </>
+          )}
           
           {isAuthenticated && isAdmin && (
             <Link to="/admin" className="navbar-link">

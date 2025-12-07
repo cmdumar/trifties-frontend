@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
-import { booksAPI } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { booksAPI, reservationsAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import BookPlaceholder from './BookPlaceholder';
 import './BooksList.css';
 
 function BooksList() {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState('title'); // 'title' or 'author'
+  const [reservingBookId, setReservingBookId] = useState(null);
 
   useEffect(() => {
     if (searchTerm.trim()) {
@@ -68,6 +73,33 @@ function BooksList() {
   const clearSearch = () => {
     setSearchTerm('');
     fetchBooks();
+  };
+
+  const handleReserveBook = async (bookId) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to reserve this book?')) {
+      return;
+    }
+
+    try {
+      setReservingBookId(bookId);
+      await reservationsAPI.create(bookId);
+      alert('Book reserved successfully!');
+      // Optionally refresh the books list to update status
+      fetchBooks();
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 
+                      err.response?.data?.errors?.join(', ') ||
+                      'Failed to reserve book';
+      alert(errorMsg);
+      console.error('Error reserving book:', err);
+    } finally {
+      setReservingBookId(null);
+    }
   };
 
   const formatPrice = (price) => {
@@ -204,6 +236,26 @@ function BooksList() {
               {book.description && (
                 <div className="book-description">
                   <p>{book.description}</p>
+                </div>
+              )}
+              
+              {isAuthenticated && book.status === 'available' && (
+                <div className="book-actions">
+                  <button
+                    onClick={() => handleReserveBook(book.id)}
+                    disabled={reservingBookId === book.id}
+                    className="reserve-btn"
+                  >
+                    {reservingBookId === book.id ? 'Reserving...' : 'Reserve Book'}
+                  </button>
+                </div>
+              )}
+              
+              {isAuthenticated && book.status === 'reserved' && (
+                <div className="book-actions">
+                  <button disabled className="reserve-btn disabled">
+                    Already Reserved
+                  </button>
                 </div>
               )}
             </div>

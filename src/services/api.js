@@ -123,5 +123,33 @@ export const authAPI = {
   signOut: () => api.delete('/users/sign_out'),
 };
 
+// Reservations API
+export const reservationsAPI = {
+  // Get all user's reservations
+  getAll: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return api.get(`/reservations${queryString ? `?${queryString}` : ''}`);
+  },
+  
+  // Get a single reservation
+  getById: (id) => api.get(`/reservations/${id}`),
+  
+  // Create a reservation
+  create: (bookId, note = '') => 
+    api.post('/reservations', { book_id: bookId, note }),
+  
+  // Update a reservation
+  update: (id, data) => 
+    api.patch(`/reservations/${id}`, { reservation: data }),
+  
+  // Cancel a reservation
+  cancel: (id) => api.delete(`/reservations/${id}`),
+};
+
+// User Profile API
+export const profileAPI = {
+  getProfile: () => api.get('/users/profile'),
+};
+
 export default api;
 

@@ -9,15 +9,15 @@ function LandingPage() {
     <div className="landing-page">
       <header className="landing-header">
         <div className="container">
-          <h1 className="landing-title">Book Inventory</h1>
-          <p className="landing-subtitle">Discover and manage your book collection</p>
+          <h1 className="landing-title">Trifties Bookstore</h1>
+          <p className="landing-subtitle">Build your Vintage Book Collection</p>
         </div>
       </header>
 
       <main className="landing-main">
         <div className="container">
           <section className="hero-section">
-            <h2>Welcome to Book Inventory</h2>
+            <h2>Welcome to Trifties Bookstore</h2>
             <p>
               Browse through our extensive collection of books. Search by title, author, 
               or category. Find your next great read!

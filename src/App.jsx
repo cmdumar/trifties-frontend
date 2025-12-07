@@ -6,6 +6,8 @@ import BooksList from './components/BooksList';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import AdminPage from './components/AdminPage';
+import Reservations from './components/Reservations';
+import Profile from './components/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -25,6 +27,22 @@ function App() {
               element={
                 <ProtectedRoute requireAdmin={true}>
                   <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reservations"
+              element={
+                <ProtectedRoute>
+                  <Reservations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
